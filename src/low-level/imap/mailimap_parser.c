@@ -1390,6 +1390,8 @@ static int mailimap_address_parse(mailstream * fd, MMAPString * buffer, struct m
   int r;
   int res;
   
+  parser_ctx->address_parse_in_progress = true;
+  
   cur_token = * indx;
 
   addr_name = NULL;
@@ -1464,7 +1466,9 @@ static int mailimap_address_parse(mailstream * fd, MMAPString * buffer, struct m
 
   * result = addr;
   * indx = cur_token;
-  
+
+  parser_ctx->address_parse_in_progress = false;
+
   return MAILIMAP_NO_ERROR;
 
  addr_host_free:
@@ -1476,6 +1480,9 @@ static int mailimap_address_parse(mailstream * fd, MMAPString * buffer, struct m
  addr_name_free:
   mailimap_addr_name_free(addr_name);
  err:
+ 
+  parser_ctx->address_parse_in_progress = false;
+
   return res;
 }
 
@@ -4660,6 +4667,8 @@ static int mailimap_envelope_parse_full(mailstream * fd, MMAPString * buffer, st
   message_id = NULL;
 
   cur_token = * indx;
+  
+  parser_ctx->envelope_parse_in_progress = true;
 
   r = mailimap_oparenth_parse(fd, buffer, parser_ctx, &cur_token);
   if (r != MAILIMAP_NO_ERROR) {
@@ -4804,6 +4813,8 @@ static int mailimap_envelope_parse_full(mailstream * fd, MMAPString * buffer, st
     goto message_id;
   }
 
+  parser_ctx->envelope_parse_in_progress = false;
+
   * result = envelope;
   * indx = cur_token;
 
@@ -4830,6 +4841,7 @@ static int mailimap_envelope_parse_full(mailstream * fd, MMAPString * buffer, st
  date:
   mailimap_env_date_free(date);
  err:
+  parser_ctx->envelope_parse_in_progress = false;
   return res;
 }
 
@@ -8841,6 +8853,67 @@ mailimap_quoted_char_parse(mailstream * fd, MMAPString * buffer, struct mailimap
     * result = quoted_special;
     * indx = cur_token;
 
+    return MAILIMAP_NO_ERROR;
+  }
+  else if (buffer->str[cur_token] == '\"' && parser_ctx->envelope_parse_in_progress && parser_ctx->address_parse_in_progress &&
+           mailimap_parser_context_is_malformed_address_workaround_enabled(parser_ctx)) {
+    // MAIL-861
+    //
+    // There appears to be a bug in Apple's iCloud IMAP implementation. Some fetch queries will contain
+    // malformed addresses in the ENVELOPE structure. They appear to be due to the =????= unicode quoting
+    // being applied incorrectly, but I'm not sure exactly what the problem is. Ultimately, it means that
+    // parsing addresses fails because there is an unescaped double quote character within double quoted
+    // strings, which terminates parsing of the string prematurely.
+    //
+    // To compound this bug, Apple Mail does parse these responses as valid, so it makes our client seem
+    // broken if we reject them, even though the issue does appear to be server side.
+    //
+    // In order to continue parsing these strings I only stop parsing when a double quote is followed by a
+    // space or a close paren. This is not techncially correct for all double quoted strings according to
+    // the RFC, but within an address struct it is a valid assumption.
+    //
+    // There are two ways that this hack could fail:
+    //
+    //   1. If the malformed address contained a space within the double quotes after the unescaped double
+    //      quote it would again appear that the string was terminated prematurely. Since I believe that this
+    //      bug only happens within unicode =????= strings (as defined by RFC 1342) a raw space is not
+    //      allowed anywhere in the string (it should be mapped to a '_'). But this requires a lot of assumptions
+    //      about a server bug that I don't really understand, some of which may fail.
+    //   2. If the malformed address contains a character other than a space or close paren following a double
+    //      quote string. This is not allowed in an ENVELOPE structure of an IMAP FETCH response according to
+    //      RFC 3501. But there is code in this file (delimited with UNSTRICT_SYNTAX) to skip over extra
+    //      whitespace that is not defined in the RFC, so I assume that several other servers are loose with
+    //      their syntax. This is the primary reason why I am limiting this fix only to iCloud servers.
+
+    size_t next_token = cur_token + 1;
+
+    if (next_token >= buffer->len) {
+      // There is no more data in the buffer, so there is no next character. This is requiring one character of lookahead
+      // that will not be consumed here. This will generate an error if parsing at the end of the buffer, but that's not
+      // an issue, since in all cases where this hack is applied the response must be terminated with multiple parens
+      // (the address list, the envelope list, and the fetch response list), as well as at least one \r\n.
+      return MAILIMAP_ERROR_NEEDS_MORE_DATA;
+    }
+    
+    if (mailimap_space_parse(fd, buffer, &next_token) == MAILIMAP_NO_ERROR) {
+      // The next character is a space, so treat this double quote as a string delimiter (the default behaviour)
+      return MAILIMAP_ERROR_PARSE;
+    }
+
+    if (mailimap_cparenth_parse(fd, buffer, parser_ctx, &next_token) == MAILIMAP_NO_ERROR) {
+      // The next character is a close paren, so treat this double quote as a string delimiter (the default behaviour)
+      return MAILIMAP_ERROR_PARSE;
+    }
+
+    if (mailimap_dquote_parse(fd, buffer, parser_ctx, &next_token) == MAILIMAP_NO_ERROR) {
+      // The next character is another double quote, so treat this double quote as a string delimiter (the default behaviour)
+      return MAILIMAP_ERROR_PARSE;
+    }
+
+    // This double quote is not followed by a space or a close paren, so treat it as if it were escaped even though it is not
+    * result = buffer->str[cur_token];
+    cur_token ++;
+    * indx = cur_token;
     return MAILIMAP_NO_ERROR;
   }
   else {

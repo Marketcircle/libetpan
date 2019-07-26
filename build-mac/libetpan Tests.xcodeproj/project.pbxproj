@@ -160,6 +160,13 @@
 		8568A3EF1C609C5400FF4470 /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3678619616AB4671002F2B96 /* libiconv.2.dylib */; };
 		8568A3F01C609C5400FF4470 /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3678619616AB4671002F2B96 /* libiconv.2.dylib */; };
 		8568A3F11C609C5A00FF4470 /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3678619616AB4671002F2B96 /* libiconv.2.dylib */; };
+		9261A32722E915D10095B457 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6ED6D0817A1883000A4A14C /* CoreServices.framework */; };
+		9261A32822E915D10095B457 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3678611E16AB410C002F2B96 /* CoreFoundation.framework */; };
+		9261A32922E915D10095B457 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6ED6CF817A1862C00A4A14C /* Security.framework */; };
+		9261A32B22E915D10095B457 /* libsasl2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3678612216AB4131002F2B96 /* libsasl2.2.dylib */; };
+		9261A32D22E915D10095B457 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8568A3DE1C609B8500FF4470 /* libz.tbd */; };
+		9261A32E22E915D10095B457 /* libetpan.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3678639816AB61BA002F2B96 /* libetpan.a */; };
+		9261A33522E9160D0095B457 /* imap-parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 9261A33422E9160D0095B457 /* imap-parse.c */; };
 		C6ED6CF917A1862C00A4A14C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6ED6CF817A1862C00A4A14C /* Security.framework */; };
 		C6ED6CFA17A1863E00A4A14C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6ED6CF817A1862C00A4A14C /* Security.framework */; };
 		C6ED6CFB17A1865600A4A14C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6ED6CF817A1862C00A4A14C /* Security.framework */; };
@@ -436,6 +443,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		9261A32F22E915D10095B457 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -483,6 +499,8 @@
 		3678624816AB4F32002F2B96 /* smtpsend */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = smtpsend; sourceTree = BUILT_PRODUCTS_DIR; };
 		3678639816AB61BA002F2B96 /* libetpan.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libetpan.a; path = "../../../Library/Developer/Xcode/DerivedData/libetpan-dazyuihjymonnybirhcistixjbll/Build/Products/Debug/libetpan.a"; sourceTree = "<group>"; };
 		8568A3DE1C609B8500FF4470 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		9261A33322E915D10095B457 /* imap-parse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "imap-parse"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9261A33422E9160D0095B457 /* imap-parse.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "imap-parse.c"; sourceTree = "<group>"; };
 		C6ED6CF817A1862C00A4A14C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C6ED6D0817A1883000A4A14C /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -722,6 +740,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9261A32622E915D10095B457 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9261A32722E915D10095B457 /* CoreServices.framework in Frameworks */,
+				9261A32822E915D10095B457 /* CoreFoundation.framework in Frameworks */,
+				9261A32922E915D10095B457 /* Security.framework in Frameworks */,
+				9261A32B22E915D10095B457 /* libsasl2.2.dylib in Frameworks */,
+				9261A32D22E915D10095B457 /* libz.tbd in Frameworks */,
+				9261A32E22E915D10095B457 /* libetpan.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -755,6 +786,7 @@
 				3678622216AB4E63002F2B96 /* pop-sample */,
 				3678623516AB4EE6002F2B96 /* smime */,
 				3678624816AB4F32002F2B96 /* smtpsend */,
+				9261A33322E915D10095B457 /* imap-parse */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -779,6 +811,7 @@
 				367860E216AB36DF002F2B96 /* frm-tree.c */,
 				367860E316AB36DF002F2B96 /* frm.c */,
 				367860E416AB36DF002F2B96 /* imap-sample.c */,
+				9261A33422E9160D0095B457 /* imap-parse.c */,
 				367860E816AB36DF002F2B96 /* mime-create.c */,
 				367860E916AB36DF002F2B96 /* mime-parse.c */,
 				367860EA16AB36DF002F2B96 /* option-parser.c */,
@@ -1071,6 +1104,23 @@
 			productReference = 3678624816AB4F32002F2B96 /* smtpsend */;
 			productType = "com.apple.product-type.tool";
 		};
+		9261A32322E915D10095B457 /* imap-parse */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9261A33022E915D10095B457 /* Build configuration list for PBXNativeTarget "imap-parse" */;
+			buildPhases = (
+				9261A32422E915D10095B457 /* Sources */,
+				9261A32622E915D10095B457 /* Frameworks */,
+				9261A32F22E915D10095B457 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "imap-parse";
+			productName = "imap-sample";
+			productReference = 9261A33322E915D10095B457 /* imap-parse */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1084,6 +1134,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 367860B016AB35BC002F2B96;
@@ -1092,6 +1143,7 @@
 			projectRoot = "";
 			targets = (
 				3678610A16AB3964002F2B96 /* imap-sample */,
+				9261A32322E915D10095B457 /* imap-parse */,
 				3678612816AB4314002F2B96 /* mime-parse */,
 				3678613A16AB4411002F2B96 /* mime-create */,
 				3678614C16AB44A6002F2B96 /* compose-msg */,
@@ -1240,6 +1292,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3678624A16AB4F41002F2B96 /* smtpsend.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9261A32422E915D10095B457 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9261A33522E9160D0095B457 /* imap-parse.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1603,6 +1663,20 @@
 			};
 			name = Release;
 		};
+		9261A33122E915D10095B457 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9261A33222E915D10095B457 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1755,6 +1829,15 @@
 			buildConfigurations = (
 				3678624616AB4F32002F2B96 /* Debug */,
 				3678624716AB4F32002F2B96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9261A33022E915D10095B457 /* Build configuration list for PBXNativeTarget "imap-parse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9261A33122E915D10095B457 /* Debug */,
+				9261A33222E915D10095B457 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
