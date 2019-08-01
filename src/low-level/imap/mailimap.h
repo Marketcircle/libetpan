@@ -952,6 +952,10 @@ void mailimap_set_qip_workaround_enabled(mailimap * session, int enabled);
     address records contained in an envelope.
 */
 
+#ifndef LIBETPAN_HAS_MALFORMED_ADDRESS_HACK
+  #define LIBETPAN_HAS_MALFORMED_ADDRESS_HACK  1
+#endif
+
 LIBETPAN_EXPORT
 void mailimap_set_malformed_address_workaround_enabled(mailimap * session, int enabled);
 
