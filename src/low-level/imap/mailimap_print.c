@@ -881,18 +881,20 @@ static void mailimap_msg_att_print(struct mailimap_msg_att * msg_att)
 
   print_indent();
   printf("msg-att {\n");
-  indent();
+  if (msg_att) {
+    indent();
 
-  for(cur = clist_begin(msg_att->att_list) ; cur != NULL ;
-      cur = clist_next(cur)) {
-    struct mailimap_msg_att_item * item;
+    for(cur = clist_begin(msg_att->att_list) ; cur != NULL ;
+        cur = clist_next(cur)) {
+      struct mailimap_msg_att_item * item;
 
-    item = clist_content(cur);
-    
-    mailimap_msg_att_item_print(item);
+      item = clist_content(cur);
+      
+      mailimap_msg_att_item_print(item);
+    }
+
+    unindent();
   }
-
-  unindent();
   print_indent();
   printf("}\n");
 }
@@ -1481,14 +1483,15 @@ static void mailimap_cont_req_or_resp_data_print(struct mailimap_cont_req_or_res
   print_indent();
   printf("cont-req-or-resp-data {\n");
   indent();
-
-  switch (cont_req_or_resp_data->rsp_type) {
-  case MAILIMAP_RESP_CONT_REQ:
-    mailimap_continue_req_print(cont_req_or_resp_data->rsp_data.rsp_cont_req);
-    break;
-  case MAILIMAP_RESP_RESP_DATA:
-    mailimap_response_data_print(cont_req_or_resp_data->rsp_data.rsp_resp_data);
-    break;
+  if (cont_req_or_resp_data) {
+    switch (cont_req_or_resp_data->rsp_type) {
+    case MAILIMAP_RESP_CONT_REQ:
+      mailimap_continue_req_print(cont_req_or_resp_data->rsp_data.rsp_cont_req);
+      break;
+    case MAILIMAP_RESP_RESP_DATA:
+      mailimap_response_data_print(cont_req_or_resp_data->rsp_data.rsp_resp_data);
+      break;
+    }
   }
 
   unindent();

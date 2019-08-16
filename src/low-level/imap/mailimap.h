@@ -928,6 +928,40 @@ int mailimap_is_qip_workaround_enabled(mailimap * session);
 LIBETPAN_EXPORT
 void mailimap_set_qip_workaround_enabled(mailimap * session, int enabled);
 
+/*
+    MAIL-861
+    Enable workaround for iCloud IMAP server.
+
+    iCloud sometimes returns invalid strings for FETCH responses when some of the message addresses
+    contain UTF-8 characters. I'm not sure what the exact causes/behaviour of this issue are, but
+    an example address list with the issue follows:
+ 
+               V-------- UTF8 Encoding Escape string ------------------V
+    ((NIL NIL "=?utf-8?Q?"To_Redacted=C3=A9s" NIL)("_To_=40_Redacted\"?=" NIL "to.redacted" "example.com"))
+              ^-- probable DQuote string ---^      ^-- DQuote string ---^
+                         ^
+              Unescaped quote inside of quote string
+              
+    The above list is sufficiently mangled that it's hard to tell if it should be interpreted as a
+    single address, or as two addresses. The =????= string spans two addresses, but collapsing it
+    into one field doesn't result in a valid address either, since it would have six fields instead
+    of four.
+ 
+    Enabling this workaround will successfully parse such responses by not terminating the
+    string until a quote followed by a space is received. The fix only applies to strings in
+    address records contained in an envelope.
+*/
+
+#ifndef LIBETPAN_HAS_MALFORMED_ADDRESS_HACK
+  #define LIBETPAN_HAS_MALFORMED_ADDRESS_HACK  1
+#endif
+
+LIBETPAN_EXPORT
+void mailimap_set_malformed_address_workaround_enabled(mailimap * session, int enabled);
+
+LIBETPAN_EXPORT
+int mailimap_is_malformed_address_workaround_enabled(mailimap * session);
+
 #ifdef __cplusplus
 }
 #endif

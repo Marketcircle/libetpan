@@ -2668,6 +2668,7 @@ mailimap * mailimap_new(size_t imap_progr_rate,
   f->is_163_workaround_enabled = 0;
   f->is_rambler_workaround_enabled = 0;
   f->is_qip_workaround_enabled = 0;
+  f->is_malformed_address_workaround_enabled = 0;
   return f;
   
  free_stream_buffer:
@@ -2796,4 +2797,16 @@ void mailimap_set_qip_workaround_enabled(mailimap * session, int enabled) {
 LIBETPAN_EXPORT
 int mailimap_is_qip_workaround_enabled(mailimap * session) {
   return session->is_qip_workaround_enabled;
+}
+
+LIBETPAN_EXPORT
+void mailimap_set_malformed_address_workaround_enabled(mailimap * session, int enabled) {
+  if (session) {
+    session->is_malformed_address_workaround_enabled = enabled;
+  }
+}
+
+LIBETPAN_EXPORT
+int mailimap_is_malformed_address_workaround_enabled(mailimap * session) {
+  return session->is_malformed_address_workaround_enabled;
 }

@@ -41,10 +41,14 @@
 extern "C" {
 #endif
 
+#include <libetpan/libetpan-config.h>
+
 #include "mailimap_types.h"
 
+LIBETPAN_EXPORT
 void mailimap_response_print(struct mailimap_response * resp);
 
+LIBETPAN_EXPORT
 void mailimap_greeting_print(struct mailimap_greeting * greeting);
 
 #ifdef __cplusplus

@@ -2830,8 +2830,8 @@ static int mailprivacy_gnupg_init_lock_done = 0;
 #define UNLOCK() LeaveCriticalSection(&encryption_id_hash_lock)
 #endif
 #else
-#define LOCK() do while (0)
-#define UNLOCK() do while (0)
+#define LOCK() {}
+#define UNLOCK() {}
 #endif
 static chash * encryption_id_hash = NULL;
 
