@@ -126,15 +126,15 @@ for TARGET in $TARGETS; do
 
     case $TARGET in
         (iPhoneOS)
-            TARGET_TRIPLES=("armv7-apple-ios$SDK_IOS_MIN_VERSION" "armv7s-apple-ios$SDK_IOS_MIN_VERSION" "arm64-apple-ios$SDK_IOS_MIN_VERSION")
-            HOST_TRIPLES=("armv7-apple-darwin" "armv7s-apple-darwin" "aarch64-apple-darwin")
-            MARCHS=("armv7" "armv7s" "arm64")
+            TARGET_TRIPLES=("arm64-apple-ios$SDK_IOS_MIN_VERSION")
+            HOST_TRIPLES=("aarch64-apple-darwin")
+            MARCHS=("arm64")
             EXTRA_FLAGS="-miphoneos-version-min=$SDK_IOS_MIN_VERSION"
             ;;
         (iPhoneSimulator)
-            TARGET_TRIPLES=("i386-apple-ios$SDK_IOS_MIN_VERSION-simulator" "x86_64-apple-ios$SDK_IOS_MIN_VERSION-simulator" "arm64-apple-ios$SDK_IOS_MIN_VERSION-simulator")
-            HOST_TRIPLES=("i386-apple-darwin" "x86_64-apple-darwin" "aarch64-apple-darwin")
-            MARCHS=("i386" "x86_64" "arm64")
+            TARGET_TRIPLES=("x86_64-apple-ios$SDK_IOS_MIN_VERSION-simulator" "arm64-apple-ios$SDK_IOS_MIN_VERSION-simulator")
+            HOST_TRIPLES=("x86_64-apple-darwin" "aarch64-apple-darwin")
+            MARCHS=("x86_64" "arm64")
             EXTRA_FLAGS="-miphoneos-version-min=$SDK_IOS_MIN_VERSION"
             ;;
     esac
@@ -146,7 +146,7 @@ for TARGET in $TARGETS; do
 
         echo "building for $TARGET - $MARCH (host: $HOST_TRIPLE, target: $TARGET_TRIPLE)"
         echo "*** building for $TARGET - $MARCH (host: $HOST_TRIPLE, target: $TARGET_TRIPLE) ***" >> "$logfile" 2>&1
-        
+
         PREFIX=${BUILD_DIR}/${LIB_NAME}/${TARGET}${SDK_IOS_VERSION}${MARCH}
         rm -rf $PREFIX
 
